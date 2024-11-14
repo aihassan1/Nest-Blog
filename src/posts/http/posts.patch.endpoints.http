@@ -1,0 +1,21 @@
+PATCH http://localhost:3000/posts
+Content-Type :application/json
+
+{
+    "title": "this is a test title",
+    "postType" :"post",
+    "slug": "new-with-nestjs",
+    "status" : "draft",
+    "content" : "test content",
+    "schema" : "{\r\n \"@context\": \"https://schema.org\", \r\n \"@type\": \"Person\"\r\n }",
+    "featuredImageUrl" : "http://localhost.com/image/12",
+    "publishedOn" : "2024-06-26T07:44:33+0000",
+    "tags": ["nestjs","typeScript"],
+    "metaOptions": [{
+        "key":"testKey",
+        "value" : "20"
+        }
+    ]
+    ,
+"id" :1234
+}
