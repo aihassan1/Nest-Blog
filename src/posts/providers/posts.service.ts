@@ -28,40 +28,29 @@ export class PostsService {
      * return the post to the user
      */
 
-    let metaOptions = createPostDto.metaOptions
-      ? this.metaOptionsRepository.create(createPostDto.metaOptions)
-      : null;
-
-    if (metaOptions) {
-      await this.metaOptionsRepository.save(metaOptions);
-    }
-
     // create the post
     let post = this.postRepository.create(createPostDto);
-
-    // if meta options -> add the meta options to the post
-    if (metaOptions) {
-      post.metaOptions = metaOptions;
-    }
 
     return await this.postRepository.save(post);
   }
 
-  public findAll(userId: string) {
+  public async findAll(userId: string) {
     const user = this.userService.findOneById(userId);
-    return [
-      {
-        user: user,
-        title: 'Test title',
-        content: 'test content',
-      },
+    let posts = await this.postRepository.find();
 
-      {
-        user: user,
+    return posts;
+  }
 
-        title: 'Test title2',
-        content: 'test content',
-      },
-    ];
+  public async delete(id: number) {
+    // find the post
+    // delete the post
+    // delete the meta options
+    // send a confirmation message
+
+    let post = await this.postRepository.findOneBy({ id });
+    await this.postRepository.delete({ id });
+    await this.metaOptionsRepository.delete(post.metaOptions.id);
+
+    return { deleted: true, id };
   }
 }

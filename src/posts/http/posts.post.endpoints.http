@@ -4,16 +4,16 @@ Content-Type :application/json
 {
     "title": "this is a test title 211",
     "postType" :"post",
-    "slug": "new-with-nestjss",
+    "slug": "new-with-nestjs1",
     "status" : "draft",
     "content" : "test contenttttt",
     "schema" : "{\r\n \"@context\": \"https://schema.org\", \r\n \"@type\": \"Person\"\r\n }",
     "featuredImageUrl" : "http://localhost.com/image/1211",
-    "publishedOn" : "2024-06-26T07:22:33+0000"
-   // "tags": ["nestjs","typeScript"],
-    //  "metaOptions": {
-    //      "metaValue" : "{\"sidebarEnabled\" :\"true\"}"    
-    //      }
+    "publishedOn" : "2024-06-26T07:22:33+0000",
+//    "tags": ["nestjs","typeScript"],
+     "metaOptions": {
+         "metaValue" : "{\"sidebarEnabled\" :\"true\"}"    
+         }
     
 
 }
