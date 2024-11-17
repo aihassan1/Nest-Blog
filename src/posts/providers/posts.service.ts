@@ -28,15 +28,17 @@ export class PostsService {
      * return the post to the user
      */
 
+    //find the author from the db
+    let author = await this.userService.findOneById(createPostDto.authorId);
+
     // create the post
-    let post = this.postRepository.create(createPostDto);
+    let post = this.postRepository.create({ ...createPostDto, author: author });
 
     return await this.postRepository.save(post);
   }
 
   public async findAll(userId: string) {
-    const user = this.userService.findOneById(userId);
-    let posts = await this.postRepository.find();
+    let posts = await this.postRepository.find({});
 
     return posts;
   }
@@ -44,13 +46,8 @@ export class PostsService {
   public async delete(id: number) {
     // find the post
     // delete the post
-    // delete the meta options
     // send a confirmation message
-
-    let post = await this.postRepository.findOneBy({ id });
     await this.postRepository.delete({ id });
-    await this.metaOptionsRepository.delete(post.metaOptions.id);
-
     return { deleted: true, id };
   }
 }
