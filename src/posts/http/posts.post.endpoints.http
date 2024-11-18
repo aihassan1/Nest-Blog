@@ -4,7 +4,7 @@ Content-Type :application/json
 {
     "title": "this is a test title 211",
     "postType" :"post",
-    "slug": "new-with-nestjs-3",
+    "slug": "new-with-nestjs-123",
     "status" : "draft",
     "content" : "test contenttttt",
     "schema" : "{\r\n \"@context\": \"https://schema.org\", \r\n \"@type\": \"Person\"\r\n }",
@@ -15,6 +15,7 @@ Content-Type :application/json
          "metaValue" : "{\"sidebarEnabled\" :\"true\"}"    
          },
     
-    "authorId" : 1
+    "authorId" : 1,
+    "tags" : [1]
 
 }

@@ -1,0 +1,13 @@
+POST http://localhost:3000/tags
+Content-Type :application/json
+
+{
+  "name": "TypeScript",
+  "slug": "new-with-nestjs-4",
+  "description": "test123 description",
+  "schema": "{\r\n \"@context\": \"https://schema.org\", \r\n \"@type\": \"Person\"\r\n }",
+  "featuredImageUrl": "http://localhost.com/image/1211"
+}
+
+
+
