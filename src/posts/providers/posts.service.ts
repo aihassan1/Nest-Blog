@@ -1,4 +1,10 @@
-import { Body, Injectable, Patch } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Injectable,
+  NotFoundException,
+  Patch,
+} from '@nestjs/common';
 import { UsersService } from 'src/users/providers/users.service';
 import { CreatePostDto } from '../dtos/create-post.dto';
 import { Repository } from 'typeorm';
@@ -7,6 +13,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { PatchPostDto } from '../dtos/patch-post.dto';
+import { GetPostsDto } from '../dtos/get-posts.dto';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
+import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 
 @Injectable()
 export class PostsService {
@@ -21,6 +30,9 @@ export class PostsService {
     private readonly metaOptionsRepository: Repository<MetaOption>,
 
     private readonly tagsService: TagsService,
+
+    //inject pagination provider
+    private readonly paginationProvider: PaginationProvider,
   ) {}
 
   /** create new post */
@@ -46,14 +58,22 @@ export class PostsService {
     return await this.postRepository.save(post);
   }
 
-  public async findAll(userId: string) {
-    let posts = await this.postRepository.find({
-      relations: {
-        // metaOptions: true,
-        // author: true,
-        // tags: true,
+  public async findAll(
+    postQuery: GetPostsDto,
+    userId: string,
+  ): Promise<Paginated<Post>> {
+    // let posts = await this.postRepository.find({
+    //   skip: (postQuery.page - 1) * postQuery.limit,
+    //   take: postQuery.limit,
+    // });
+
+    let posts = await this.paginationProvider.paginateQuery(
+      {
+        limit: postQuery.limit,
+        page: postQuery.page,
       },
-    });
+      this.postRepository,
+    );
 
     return posts;
   }
@@ -70,8 +90,24 @@ export class PostsService {
   public async update(patchPostDTO: PatchPostDto) {
     // find the tags
     let tags = await this.tagsService.findMultipleTags(patchPostDTO.tags);
+
+    if (!tags || tags.length !== patchPostDTO.tags.length) {
+      throw new BadRequestException(
+        'Please insure that your tags ids are correct',
+      );
+    }
+
     // find the post
-    let post = await this.postRepository.findOneBy({ id: patchPostDTO.id });
+    let post = undefined;
+    try {
+      post = await this.postRepository.findOneBy({ id: patchPostDTO.id });
+    } catch (error) {
+      throw new BadRequestException('Failed to connect to the database');
+    }
+    if (!post) {
+      throw new NotFoundException('Post was not found');
+    }
+
     // update the post
     post.title = patchPostDTO.title ?? post.title;
     post.content = patchPostDTO.content ?? post.content;
@@ -85,6 +121,12 @@ export class PostsService {
     // Assign the new tags
     post.tags = tags;
     // save and return the post
-    return this.postRepository.save(post);
+
+    try {
+      await this.postRepository.save(post);
+    } catch (error) {
+      throw new BadRequestException('Failed to connect to the database');
+    }
+    return post;
   }
 }

@@ -1,4 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  Injectable,
+  NotFoundException,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Tag } from '../tag.entity';
 import { In, Repository } from 'typeorm';
@@ -17,12 +23,30 @@ export class TagsService {
   }
 
   public async findMultipleTags(tags: number[]) {
-    let results = await this.tagRepository.find({
-      where: {
-        id: In(tags),
-      },
-    });
+    try {
+      const results = await this.tagRepository.find({
+        where: {
+          id: In(tags),
+        },
+      });
+      if (results.length === 0) {
+        throw new NotFoundException('the tags are not found');
+      }
+      return results;
+    } catch (error) {
+      throw new RequestTimeoutException('failed to connect to the db');
+    }
+  }
 
-    return results;
+  public async delete(id: number) {
+    await this.tagRepository.delete(id);
+
+    return { deleted: true, id };
+  }
+
+  public async softRemove(id: number) {
+    await this.tagRepository.softDelete(id);
+
+    return { deleted: true, id };
   }
 }

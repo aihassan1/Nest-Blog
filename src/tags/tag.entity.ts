@@ -29,7 +29,9 @@ export class Tag {
   @Column({ type: 'varchar', length: 1024, nullable: true })
   featuredImageUrl?: string;
 
-  @ManyToMany(() => Post, (post) => post.tags)
+  @ManyToMany(() => Post, (post) => post.tags, {
+    onDelete: 'CASCADE',
+  })
   posts: Post[];
 
   @CreateDateColumn()

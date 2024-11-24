@@ -4,14 +4,14 @@ Content-Type :application/json
 {
     "title": "this is a test title",
     "postType" :"post",
-    "slug": "new-with-nestjs",
+    "slug": "new-with-nestjs-1",
     "status" : "draft",
     "content" : "test content",
     "schema" : "{\r\n \"@context\": \"https://schema.org\", \r\n \"@type\": \"Person\"\r\n }",
     "featuredImageUrl" : "http://localhost.com/image/12",
     "publishedOn" : "2024-06-26T07:44:33+0000",
-    "tags": [3,4]
+    "tags": [4,6]
     
     ,
-"id" :10
+"id" :19
 }

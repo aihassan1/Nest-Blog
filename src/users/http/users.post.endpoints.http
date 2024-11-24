@@ -3,6 +3,29 @@ Content-Type: application/json
 {
     "firstName":"John ",
     "lastName": "doe",
-    "email":"ajohndoe@gmail.com",
+    "email":"1johndoe@gmail.com",
     "password":"Password123$$$"
 }
+
+
+
+POST http://localhost:3000/users/create-many
+Content-Type: application/json
+
+{
+
+"users":  [{
+    "firstName":"tom",
+    "lastName": "doe",
+    "email":"tom@gmail.com",
+    "password":"Password123$$$"
+},
+{
+    "firstName":"ali",
+    "lastName": "doe",
+    "email":"ali@gmail.com",
+    "password":"Password123$$$"
+}]
+
+}
+
